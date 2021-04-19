@@ -4,6 +4,13 @@ ldi r0, 0xf3 #================= Vxy
 ld r0, r0
 ldi r2,0xf5 #===============ballY
 ld r2, r2
+if ############# vxy = 0 (when blocked){
+tst r0
+is eq
+ldi r0, 0xf8
+st r0, r2
+br beg
+fi#####################################}
 ldi r3, 0b00000100
 and r0, r3
 if###################################Vx < 0 ? => just move to torture the player {
@@ -13,14 +20,14 @@ ldi r0, 0xf8
 st r0, r2
 br beg
 fi############################################################################## }
-ldi r3, 8
-if ################################## Vy == 0 ? ***simple {
-cmp r0, r3                                               
-is lt													 
-ldi r0, 0xf8											 
-st r0, r2												 
-br beg
-fi ###################################################### }
+#ldi r3, 8
+#if ################################## Vy == 0 ? ***simple {
+#cmp r0, r3                                               
+#is lt													 
+#ldi r0, 0xf8											 
+#st r0, r2												 
+#br beg
+#fi ###################################################### }
 ldi r1,0xf4 #============ballX
 ld r1, r1
 neg r1
@@ -42,6 +49,7 @@ ldi r3, 3
 	 ldi r3, 0
 	 shla r1
 	 addc r0, r3
+	 ldi r0, 0
 	 add r1, r1
 	 addc r0, r3
 	 br next
@@ -56,9 +64,9 @@ ldi r3, 2
 	 addc r0, r3
 	 br next
 	fi	
-ldi r0, 0
 ldi r3, 0
 next:
+ldi r0, 0
 add r1, r2 ########### r2 = d = y + (224 - x)/vx * vy
 addc r0, r3
 ldi r0, 1
@@ -68,6 +76,7 @@ tst r3
 is eq
 else
 neg r2
+inc r2
 fi
 ldi r0, 0xf8 
 st r0, r2
@@ -88,6 +97,7 @@ ldi r3, 4
 	 ldi r0, 0
 	 shla r1
 	 addc r0, r3
+	 ldi r0, 0
 	 shla r1
 	 addc r0, r3
 	 br next2
@@ -100,6 +110,7 @@ ldi r3, 3
 	 ldi r0, 0
 	 shla r1
  	 addc r0, r3
+     ldi r0, 0
 	 add r1, r1
 	 addc r0, r3
 	 br next2
@@ -115,8 +126,8 @@ ldi r3, 2
 	 br next2
 	fi	
 ldi r3, 0
-ldi r0, 0
 next2:
+ldi r0, 0
 add r1, r2 ########### r2 = d = y + (224 - x)/vx * vy
 addc r0, r3
 #neg r2######?
@@ -124,9 +135,10 @@ ldi r0, 1
 and r0, r3
 if### even / odd
 tst r3
-is ne
-else
+is gt
 neg r2
+inc r2
+else
 fi
 ldi r0, 0xf8 
 st r0, r2

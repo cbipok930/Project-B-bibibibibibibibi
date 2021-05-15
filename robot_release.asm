@@ -15,55 +15,40 @@ br beg
 fi#####################################}
 ldi r3, 0b00000100
 and r0, r3
-if###################################Vx < 0 ? => just move to torture the player {
+if###################################Vx < 0 ? => just move {
 tst r3
 is gt
 ldi r0, 0xf8
 st r0, r2
 br beg
 fi############################################################################## }
-#ldi r3, 8
-#if ################################## Vy == 0 ? ***simple {
-#cmp r0, r3                                               
-#is lt													 
-#ldi r0, 0xf8											 
-#st r0, r2												 
-#br beg
-#fi ###################################################### }
 neg r1
 ldi r3, 228#######(228 - x)
 add r3, r1 ## left to cross bat
-#push r0#############checking vx
-#ldi r3, 0b00000111
-#and r3, r0
-#neg r0
-#inc r0
-#ldi r3, -3 ##(224 - x)/vx
-#if
-#cmp r3, r0
-#is eq#################################### in case abs(Vx) == 3
-#shr r1
-#ldi r3, 0b01111111
-#and r3, r1
-#move r1, r3
-#	while 
-#	tst r3
-#	stays gt
-#	add r0, r3
-#	dec r1
-#	wend
-#br endx
-#fi
-#ldi r3, -2
-#if#################################### in case abs(Vx) == 2
-#cmp r3, r0
-#is eq
+push r0#############checking vx
+ldi r3, 0b00000111
+and r3, r0
+neg r0
+ldi r3, -3 ##(224 - x)/vx
+if
+cmp r3, r0
+is eq#################################### in case abs(Vx) == 3
+ldi r0, 0xf0
+st r0, r1
+ldi r1, 0xf1
+ld r1, r1
+br endx
+fi
+ldi r3, -2
+if#################################### in case abs(Vx) == 2
+cmp r3, r0
+is eq
 shr r1
 ldi r3, 0b01111111
 and r3, r1
-#fi	 
-#endx:
-#pop r0
+fi	 
+endx:
+pop r0
 ldi r3, 32
 if################################################ Vy > 0 { 
 cmp r0, r3
